@@ -5,7 +5,7 @@ actual solutions recorded while doing the ctf this time.
 - crypto
   - [12-shades-of-redpwn](https://github.com/beepboop271/ctf-writeups-solutions/tree/master/redpwnCTF%202020/crypto/12-shades-of-redpwn)
   - [itsy-bitsy](https://github.com/beepboop271/ctf-writeups-solutions/tree/master/redpwnCTF%202020/crypto/itsy-bitsy)
-  - primimity
+  - [primimity](https://github.com/beepboop271/ctf-writeups-solutions/tree/master/redpwnCTF%202020/crypto/primimity)
 - misc
   - CaaSiNO
 - pwn

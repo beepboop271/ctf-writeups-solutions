@@ -19,7 +19,7 @@ We see that there are twelve colours, so maybe we can number the colours in the 
 
 ## Reasoning
 
-We can assume each pair of colours is a character, which means that there are 12*12 = 144 possible characters. This is definitely enough to fit the flag characters as ascii, and since there are only 12 colours, we can be fairly sure it's a base 12 encoding.
+We can assume each pair of colours is a character, which means that there are `12*12 = 144` possible characters. This is definitely enough to fit the flag characters as ascii, and since there are only 12 colours, we can be fairly sure it's a base 12 encoding.
 
 Converting the colours gives us this:
 

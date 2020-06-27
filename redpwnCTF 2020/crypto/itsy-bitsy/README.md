@@ -19,7 +19,7 @@ for c in flag:
     assert i in range(2**6,2**7)
 ```
 
-Each character is in the interval [2\*\*6, 2\*\*7), meaning that we're trying to find a sequence containing many characters, all of which are 7 bits long.
+Each character is in the interval `[2`<sup>`6`</sup>`, 2`<sup>`7`</sup>`)`, meaning that we're trying to find a sequence containing many characters, all of which are 7 bits long.
 
 ```python
 # line 52, main()
@@ -37,16 +37,16 @@ n = len(flag_bits)
 random_bits = generate_random_bits(lb,ub,n)
 ```
 
-The random bits this function generates are not actually truly random. It repeatedly generates numbers in the interval [`lb`, `ub`] until `n` bits have been produced. The key to solving this problem lies in the fact that all numbers between `2**n` and `(2**(n+1)) - 1` (inclusive) are all `n+1` bits long. Example: `2**5 = 10 0000` and `2**6 - 1 = 11 1111`. Notice that the first bit is `1`. Of course, *every possible random number in this range will have the first bit as `1`.*
+The random bits this function generates are not actually truly random. It repeatedly generates numbers in the interval `[lb, ub]` until `n` bits have been produced. The key to solving this problem lies in the fact that all numbers between `2`<sup>`n`</sup> and `2`<sup>`n+1`</sup>` - 1` (inclusive) are `n+1` bits long. Example: `2`<sup>`5`</sup>` = 10 0000` and `2`<sup>`6`</sup>` - 1 = 11 1111`. Notice that the first bit is `1`. Of course, *every possible random number in this range will have the first bit as `1`.*
 
 ## Reasoning
 
 If we can predictably produce a `1` in the random stream, that means we can solve for the original bit from the XOR operation, as `b XOR 1 = 0` means that `b` must be `1`, and `b XOR 1 = 1` means that `b` must be `0`. For each bit in the random stream that we know to be `1`, the corresponding flag bit will be equal to the NOT of the corresponding ciphertext bit.
 
 Then, the question is how to produce a `1` bit for each possible bit in the flag.
-> all numbers between `2**n` and `(2**(n+1)) - 1` (inclusive) are all `n+1` bits long
+> all numbers between `2`<sup>`n`</sup> and `2`<sup>`n+1`</sup>` - 1` (inclusive) are `n+1` bits long
 
-If the first bit of our random number is `1`, and we can create random numbers of any length `n` just by inputting `i = n-1` and `j = n`, that means we can place a `1` almost<sup id="a2">[2](#f2)</sup> anywhere in the stream. By choosing our `i` and `j` values.
+If the first bit of our random number is `1`, and we can create random numbers of any length `n` just by inputting `i = n-1` and `j = n`, that means we can place a `1` almost<sup id="a2">[2](#f2)</sup> anywhere in the stream by choosing our `i` and `j` values.
 
 Examples:
 
