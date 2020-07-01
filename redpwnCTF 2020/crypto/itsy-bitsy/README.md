@@ -4,7 +4,7 @@
 >
 > `nc 2020.redpwnc.tf 31284`
 
-Provided files: `itsy-bitsy.py`<sup id="a1">[1](#f1)</sup>
+Provided file: `itsy-bitsy.py`<sup id="a1">[1](#f1)</sup>
 
 Prerequisite topics: [Binary, bits, powers of 2](https://www.mathsisfun.com/binary-number-system.html), [Boolean operations like XOR, NOT](http://www.ee.surrey.ac.uk/Projects/CAL/digital-logic/gatesfunc/index.html), [Bitwise operations](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators)
 

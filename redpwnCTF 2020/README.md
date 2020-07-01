@@ -7,15 +7,15 @@ actual solutions recorded while doing the ctf this time.
   - [itsy-bitsy](https://github.com/beepboop271/ctf-writeups-solutions/tree/master/redpwnCTF%202020/crypto/itsy-bitsy)
   - [primimity](https://github.com/beepboop271/ctf-writeups-solutions/tree/master/redpwnCTF%202020/crypto/primimity)
 - misc
-  - CaaSiNO
+  - [CaaSiNO](https://github.com/beepboop271/ctf-writeups-solutions/tree/master/redpwnCTF%202020/misc/CaaSiNO)
 - pwn
   - coffer-overflow-1
   - coffer-overflow-2
 - rev
-  - bubbly
-  - SMarT-solver
+  - [bubbly](https://github.com/beepboop271/ctf-writeups-solutions/tree/master/redpwnCTF%202020/rev/bubbly)
   - i-wanna-find-the-flag
+  - SMarT-solver
 - web
+  - post-it-notes
   - static-pastebin
   - static-static-hosting
-  - post-it-notes
