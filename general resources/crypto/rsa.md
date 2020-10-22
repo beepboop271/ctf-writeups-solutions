@@ -37,7 +37,7 @@ We also need a number `e` for the public and private keys that is less than and 
 
 Then, the private key `d` will be equal to `inverse(e, totient(n))`, where `inverse(x, n)`<sup id="a3">[3](#f3)</sup> is the [modular multiplicative inverse](https://en.wikipedia.org/wiki/Modular_multiplicative_inverse) of x mod n (`de ≡ 1 (mod totient(n))`).
 
-Essentially what that operation means is solving a value of `d` (pretty sure there are infinite, they all work, so just pick the lowest) in this equation: `de mod totient(n) = 1 mod totient(n)` (the triple bar equals and writing mod in brackets on the right side is just the notation for this, they mean the same thing).
+Essentially what that operation means is solving a value of `d` (pretty sure there are infinite, they all work, so just pick the lowest) in this equation: `de mod totient(n) = 1 mod totient(n)` which is essentially the same as `de mod totient(n) = 1` (the triple bar equals and writing mod in brackets on the right side is just the notation for this, they mean the same thing).
 
 Summary:
 
