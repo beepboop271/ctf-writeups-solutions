@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Flag Encryptor</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<style>
+		* {
+			font-family: sans-serif;
+			font-size: 1em;
+		}
+		.flex-center {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		body {
+			margin: 0;
+			height: 100vh;
+			background-color: #FAEBD7;
+		}
+		#form {
+			width: 90vw;
+			max-width: 300px;
+			height: 90vh;
+			max-height: 150px;
+			flex-direction: column;
+			background-color: white;
+			border-radius: 15px;
+		}
+	</style>
+</head>
+<body class="flex-center">
+	<form id="form" class="flex-center" action="/encrypt" method="POST">
+		<input name="key" placeholder="Encryption Key">
+		<br>
+		<button type="submit">Encrypt!</button>
+	</form>
+</body>
+</html>

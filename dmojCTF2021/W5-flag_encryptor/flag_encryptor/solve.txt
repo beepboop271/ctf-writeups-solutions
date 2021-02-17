@@ -1,0 +1,29 @@
+keep guessing keys until the server reports a valid one, needs to have a length the same as the flag and all unique characters:
+
+abcdefghijklmnopqrstuvwxyz0123456789ABCDEFG
+
+works (43 characters long)
+
+locally playing around with the encrypt function, we see it often throws errors
+
+turns out, it throws an error when your key is not completely unique - and it actually reveals the character of the flag at the index where you have your first duplicate
+
+it reveals the character through a keyerror - which is converted to a string and sent as a post response
+
+we can actually get non unique characters in the key because the key is converted to uppercase *after* doing the unique checking, so just have aA...., a.A..., a..A.., a...A., a....A and crack the whole flag
+
+i didn't even look into what the encryption function did in detail, looks like its either a red herring or this wasn't intended solve
+
+however, when we run the solve script it turns out that the character at index 39 (4th from the end) did not return an error.
+
+ctf{l4ngu4g3s_4r3_w31rd_s0m3t1m3s_3b234[2788186640547423044, -1474214992391926078, -4495376358212359790, -4501024763461522821, 6229062558941705838, 1369405752680837785, 7798298403753601835, 1696521127042922861, -9174424503987654863, -3607882330384868334, 6691200918677446473, -7977104820379071687, -7293258571759577396, -2245898847302633360, -838642439808900090, 4896387762523781633, -7593905921791155317, -8040813476489186084, -8245010486255416242, -7926254463993075129, -2900760302649029215, 4743528790056828457, 3453148992961348138, 417523051955143684, -4522646677505446860, -8083257915853555872, 3001629969420010820, 7456526116619358649, -7941524325271484258, -276881804507510746, 1981017160678265576, -7835383731988486993, 8788227384384110878, -5434402599089810218, -5325100109076980695, 6349392795600545018, -1540897021045361988, -1764833788130289315, -1469971392360315417, -4821551192940845298, 6584567637479192693, -4544105664484762147, 5565399908400295578]ae}
+
+to figure out what character this was, i just ran the encryption function locally to see what character in "ctf{l4ngu4g3s_4r3_w31rd_s0m3t1m3s_3b234?ae}" wouldn't throw an error given the key "abcdefghijklmnopqrstuvwxyz0123456789!@#A%^&" - turns out it was "c", the character in the flag where we used "a"
+
+again, didn't really look into the encryption function, so i can't explain it, but it seems like a reasonable edge case
+
+challenge is a good lesson to always try out the code first before spending too much time reversing it - you might be missing something obvious
+
+ctf{l4ngu4g3s_4r3_w31rd_s0m3t1m3s_3b234cae}
+
+after solving the question, i rewrote the solve script to shift around aA instead of just the A, and it produces a cleaner result (i suppose this script would fail if there were two identical characters in a row though).

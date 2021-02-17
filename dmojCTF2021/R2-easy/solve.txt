@@ -1,0 +1,46 @@
+why reverse when you can debug
+why debug when you can reverse:
+
+running the program we see it prints some messages asking us for input, so we search the executable for these strings and find that there is a single function that prints out everything at 0x4017db. investigating this function, we see that it does the following (names created by me):
+
+srand(time)
+printf("Time: %d\n", time);
+iterations = 0;
+while (iterations < 500 || iterations > 1000) {
+  iterations = rand();
+}
+printf("Iterations = %d\n", iterations);
+printf("What is the expected output?\n");
+// something about flushing
+scanf("%d", &input);
+expected = something(iterations);
+if (expected == input) {
+  printFlag(iterations, expected);  // i think
+} else {
+  printf("Wrong again!\n");
+}
+
+investigating the something and printFlag functions leads to tons of other functions - but notice how the printFlag function does not depend on input at all
+
+we can just patch the executable:
+
+  401888:	39 c2                	cmp    edx,eax
+  40188a:	0f 94 c0             	sete   al
+  40188d:	84 c0                	test   al,al
+  40188f:	74 07                	je     0x401898
+  401891:	e8 c8 fe ff ff       	call   0x40175e
+  401896:	eb 0c                	jmp    0x4018a4
+
+  401888:	39 c2                	cmp    edx,eax
+  40188a:	0f 94 c0             	sete   al
+  40188d:	84 c0                	test   al,al
+  40188f:	90                   	nop
+  401890:	90                   	nop
+  401891:	e8 c8 fe ff ff       	call   0x40175e
+  401896:	eb 0c                	jmp    0x4018a4
+
+(nops are used so that the length of the executable doesn't change and so we aren't prevented from running it)
+
+when running the patched executable we just input whatever we want and get the flag.
+
+ctf{why_r3v3rs3_wh3n_y0u_c4n_d3bug_0134ae4b}

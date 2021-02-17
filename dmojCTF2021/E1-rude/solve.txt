@@ -1,0 +1,8 @@
+i dont really know ruby
+
+.send(b, c) searches for a method named b and provides the arguments in c, and Object.const_get("Object").send("flag", "asdf") works to call flag, but provides 1 arg when 0 are expected
+
+instead, write Object.const_get("Object").send("send", "flag") which gets Object and uses the send method to call the send method again, but with the send(name) version instead of send(name, args).
+
+Object send flag
+ctf{w3lcome_t0_ruby_my_fr13nds_d0dd50}

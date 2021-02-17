@@ -1,0 +1,21 @@
+Access link
+Inspect
+> <!-- If you want to continue, go to /next.html -->
+
+change url
+Inspect
+
+> function next() {
+>     window.location.href = ...
+> }
+
+call next() in console
+
+> app = Flask(__name__, static_url_path='', static_folder='.')
+
+it is serving its own folder, which means we should be able to access this file
+
+go to hello.py
+
+get flag
+ctf{organize_your_folders_d650b010}

@@ -1,0 +1,9 @@
+docx files are zipped xml files
+
+unzip
+
+word/settings.xml
+
+comment at bottom
+
+ctf{z1p_f13s_ar3_3v3rywh3r3_97b7aeba74}

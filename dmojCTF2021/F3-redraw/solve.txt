@@ -1,0 +1,13 @@
+image given => stegsolve
+
+nothing interesting by itself
+
+look up the original image. there's an identically sized one at 
+
+https://commons.wikimedia.org/wiki/File:Orange_tree_in_Santa_Clara_California.jpg
+
+again in stegsolve, loading redraw and comparing it with original yields nothing but a few specs in the xor
+
+loading the original and comparing it with redraw yields an interesting subtraction that spells out in red pixels
+
+ctf{why_did_you_waste_your_time_on_this}

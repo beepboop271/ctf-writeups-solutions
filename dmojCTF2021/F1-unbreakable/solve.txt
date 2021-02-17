@@ -1,0 +1,7 @@
+seeded with time -> can probably brute force
+
+after a few seconds, find a seed 1595568762 (crack.cpp)
+
+reverse the xor to get the flag (solve.cpp)
+
+ctf{uNbR3aK34b1e_0n3_t1m3_p4d_d7e81c}

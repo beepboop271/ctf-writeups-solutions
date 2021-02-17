@@ -1,0 +1,20 @@
+about java: classes are lazy loaded and read dynamically - .class files are only read and processed when used for the first time, using ClassLoaders
+
+the challenge used a java agent to run code before the rest of the program, in this case setting up a ClassFileTransformer that intercepts each class load.
+
+at first, i thought that maybe the solution had something to do with class names - but it turns out java is super strict with its class names, you can't try to load a class file under a name that isn't the same as the actual class in the class file.
+
+then i thought about trying to circumvent the transformer, but the only way i could find to do this was by reading the class file off the disk myself, and pass it to Unsafe.defineAnonymousClass - this worked perfectly fine locally but of course did not work on the contest server (who knows where the class file is located, it could be anywhere, plus im pretty sure it denies file opening)
+
+then i remembered reading in the Instrumentation documentation:
+"If a transformer throws an exception during execution, the JVM will still call the other registered transformers in order."
+
+and it seems that throwing an exception inside the transformer might cause java to ignore the transformer.
+
+NullPointerException does not seem possible to pull off (String className would need to be null), but it turns out that Runtime.halt can actually throw a SecurityException if it doesn't have permission to halt the program
+
+so, assuming the contest server running the java code doesn't block the permission to *set* a security policy, we should be fine.
+
+we change the security manager to be our own implementation, where we allow everything except for halting the program. then, we use System.setSecurityManager and right after we load the flag class. since the loading, transforming, and security checking all happens dynamically, we just need to load the class after changing the security manager - and this solution worked.
+
+ctf{3v3ry1_l0v3s_y4v4_r1ght_092b25bb}

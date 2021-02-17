@@ -1,0 +1,19 @@
+main:
+
+f(0)
+
+f:
+
+...
+flag
+...
+
+find flag (in .data, offset 0x104060):
+
+7d 64 64 62 35 63 39 38 64 5f 67 34 31 66 5f 34 5f 73 6e 75 70 5f 67 6e 31 33 73 72 33 76 33 72 7b 66 74 63
+
+convert to ascii, reverse the string
+
+ctf{r3v3rs31ng_puns_4_f14g_d89c5bdd}
+
+alternatively: strings reversing, find }ddb5c98d_g41f_4_snup_gn13sr3v3r{ftc and reverse

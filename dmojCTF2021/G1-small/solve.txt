@@ -1,0 +1,3 @@
+open image
+zoom in on dark area
+ctf{s33_th3_b1gg3r_p1ctur3_cd1e50601330}

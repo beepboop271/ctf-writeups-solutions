@@ -1,0 +1,18 @@
+open xls - wants a4 and a5 but they are empty - look for macros
+
+vba project has a password.
+
+https://davidmurdoch.com/2014/11/19/remove-password-from-vba-project/
+
+save as xlsm and use the xlsm method because xls doesn't work for some reason
+
+open vba project and run the run function
+
+puts "AEeEeEeEeEeEeEeEeEeE" in a4 but overflows on a5
+
+move code into python and print out the first 100 values of three(), they repeat, so just make it non recursive and find the output is "VUAAKQTLGQNFFGBVUBLWKTNW"
+
+from Crypto.Hash import SHA1
+print(SHA1.new(data="AEeEeEeEeEeEeEeEeEeEVUAAKQTLGQNFFGBVUBLWKTNW".encode()).hexdigest())
+
+ctf{db1ad5225e5ee65c34525e02d84d4a00c2aababd}

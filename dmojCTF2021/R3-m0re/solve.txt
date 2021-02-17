@@ -1,0 +1,15 @@
+pure pain.
+
+https://github.com/Konloch/bytecode-viewer
+
+decompile ZNNCO.class to see it produces a byte array of data
+
+inspect the output of new ZNNCO().data
+
+has some java stuff but mostly bin data, assume its a class file
+
+it is a class file, same format as ZNNCO
+
+keep decompiling until TIEIZ, which contains the flag.
+
+ctf{j4v4_4g3nt_4w3som3_8116f4adf94bc}

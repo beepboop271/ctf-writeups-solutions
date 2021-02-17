@@ -1,0 +1,18 @@
+parser level searching- can't use asdf()
+
+this is an issue, since we need to explicity output to stdout, and im not aware of printing without using print or sys.stdout.write
+
+searching around google for ideas 'calling function without brackets', found
+https://www.reddit.com/r/Python/comments/gc8l8x/is_there_a_way_to_call_a_function_without/
+
+realized you can use decorators
+
+solution:
+
+convert = lambda x: flag
+@print
+@convert
+def fun():
+    pass
+
+ctf{calling_w1th0ut_ca11ing_b3222032}

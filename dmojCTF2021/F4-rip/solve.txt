@@ -1,0 +1,58 @@
+21 5    00 c
+29 4    01 t
+06 d    02 f
+02 f    03 {
+37 }    04 v
+34 5    05 1
+09 _    06 d
+27 6    07 e
+16 3    08 0
+30 a    09 _
+31 6    10 1
+12 _    11 s
+36 6    12 _
+17 r    13 d
+20 _    14 1
+11 s    15 v
+13 d    16 3
+04 v    17 r
+05 1    18 s
+07 e    19 3
+19 3    20 _
+10 1    21 5
+14 1    23 3
+03 {    24 1
+23 3    25 f
+01 t    26 8
+24 1    27 6
+15 v    28 1
+08 0    29 4
+18 s    30 a
+32 4    31 6
+00 c    32 4
+26 8    33 9
+25 f    34 5
+35 d    35 d
+28 1    36 6
+33 9    37 }
+
+played the video in vlc, we see a bunch of characters including { and }
+given this + description, we can assume this is the flag out of order
+
+inspecting the media information in vlc, we see there are two sub tracks
+
+the one that applied for me automatically (since i usually use subs) was track 1 and was empty
+
+track 2 had various numbers - probably the index of the character that was on screen at the time
+
+(the problem name rip refers to the .srt subrip format)
+
+applying track 2, slowing the video down, we can copy the numbers and characters down, then sort the lines by number to get the flag
+
+ctf{v1de0_1s_d1v3rs3_531f8614a6495d6}
+
+however - this was wrong (for me) - i used mkvextract from mkvtoolnix to extract track 2 of the subtitles, and found the last second of the video had the text "22", and checking my table, i was missing index 22
+
+i assumed this was part of the challenge - windows media player, vlc, and the dumb windows 10 videos thing all couldn't play it, but while trying to debug, i played it in ffplay and instead of crashing, it just sort of froze on a "2" at the end (ffplay still thought it was playing video and not stopping when the video was over) which turned out to be the missing character.
+
+ctf{v1de0_1s_d1v3rs3_5231f8614a6495d6}
