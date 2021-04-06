@@ -6,7 +6,7 @@
 
 Provided file: `bubbly`
 
-Prerequisite topics: basic knowledge of [Ghidra](https://github.com/beepboop271/ctf-writeups-solutions/tree/master/general%20resources/rev%20and%20pwn/ghidra.md), [C](https://gribblelab.org/CBootCamp/), [x86-64 assembly](https://github.com/beepboop271/ctf-writeups-solutions/tree/master/general%20resources/rev%20and%20pwn/x86-assembly.md)
+Prerequisite topics: [Reversing Basics](https://github.com/beepboop271/ctf-writeups-solutions/tree/master/general%20resources/rev%20and%20pwn/rev-basics.md)
 
 ## Investigation
 
@@ -55,7 +55,7 @@ int main(void) {
   uint32_t i;
   int unused;
   _Bool pass;
-  
+
   setbuf(stdout,(char *)0x0);
   setbuf(stdin,(char *)0x0);
   setbuf(stderr,(char *)0x0);
@@ -85,7 +85,7 @@ This program seems quite simple. It looks like we want to get `pass = true`, so 
 ```c
 void print_flag(void) {
   int unused;
-  
+
   system("cat flag.txt");
   return;
 }
@@ -164,7 +164,7 @@ It looks like we continually swap two adjacent values in the array, until we ent
 _Bool check(void) {
   uint32_t i;
   _Bool pass;
-  
+
   i = 0;
   while( true ) {
     if (8 < i) {
