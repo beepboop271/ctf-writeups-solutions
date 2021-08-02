@@ -71,10 +71,10 @@ Since the value `A` appears so often, we should try to map it to the shortest po
 
 Character | Frequency | Uncompressed | Compressed
 -|-|-|-
-A | 10 | `01000001` | `1`
-B | 6 | `01000010` | `01`
-C | 3 | `01000011` | `001`
-D | 1 | `01000100` | `000`
+`A` | 10 | `01000001` | `1`
+`B` | 6 | `01000010` | `01`
+`C` | 3 | `01000011` | `001`
+`D` | 1 | `01000100` | `000`
 
 ```txt
 "ABAAACABBBAAAACCABBD"
@@ -94,17 +94,17 @@ The next few bits are `01111`. The only code that starts with `01` is `B` (becau
 
 An efficient way to build and decode this mapping uses a Huffman Tree, which is a kind of binary tree.
 
-Each leaf node represents a uncompressed value, such as the letter `A`, or `B`. Then, the compressed codes are stored using the path to leaf from the root. If we let "left" be `0`, and "right" be `1`, the Huffman Tree for our example would look like:
+Each leaf node represents an uncompressed value, such as the letter `A`, or `B`. Then, the compressed codes are stored using the path to leaf from the root. If we let "left" be `0`, and "right" be `1`, the Huffman Tree for our example would look like:
 
 ```txt
      Root
      /  \
-    x    A (A path: R->right = 1)
+    x    A (A path: Root->right = 1)
    / \
-  x   B    (B path: R->left->right = 01)
+  x   B    (B path: Root->left->right = 01)
  / \
-D   C      (C path: R->left->left->right = 001)
-           (D path: R->left->left->left = 000)
+D   C      (C path: Root->left->left->right = 001)
+           (D path: Root->left->left->left = 000)
 ```
 
 The prefix-free property is guaranteed as long as our uncompressed characters stay as leaves, because the only way a code can be a prefix of another is if it is a parent to the other in the tree, and leaves have no children. The process of building or using the tree is not very relevant to the challenge, and can be found [on Wikipedia](https://en.wikipedia.org/wiki/Huffman_coding#Basic_technique). The most important information is that a Huffman Tree is built, based on the frequency of uncompressed characters, in order to map those uncompressed values to compressed codes, and that this tree is stored along with the compressed data.
@@ -113,9 +113,9 @@ The prefix-free property is guaranteed as long as our uncompressed characters st
 
 The zip file format is primarily an archive format: it takes many files and directories, and converts them into a single file which can be extracted back into the original directory structure. It *also* supports compression, however an important part of this compression is that it is applied on a per-file basis. Each file is compressed independently. This is different from a `.tar.gz` file, which first uses tar to package the directory structure into a single file, then gzips the resulting file all at once.
 
-Since each file is compressed individually, the zip file as a whole will not contain the tree(s) I am searching for. Initially, I did not remember this fact, so I made some uninformed searches like "zip view huffman tree". However, I stumbled upon this thread: [What tool lets me see gzip's Huffman table and blocks?](https://stackoverflow.com/questions/28253173/what-tool-lets-me-see-gzips-huffman-table-and-blocks), which pointed me towards a small program named [infgen](https://github.com/madler/infgen) which can output a human readable description of a gzip, zlib, or deflate stream. I saved this for later, did a bit of research, and remembered the existence of per-file compression. Searching "zip check algorithm" gave me: [How to determine compression method of a ZIP/RAR file](https://stackoverflow.com/questions/6896487/how-to-determine-compression-method-of-a-zip-rar-file), which pointed me towards the Python package [hachoir](https://pypi.org/project/hachoir/).
+Since each file is compressed individually, the zip file as a whole will not contain the tree(s) I am searching for. Initially, I did not remember this fact, so I made some uninformed searches like "zip view huffman tree". However, that gave me this thread: [What tool lets me see gzip's Huffman table and blocks?](https://stackoverflow.com/questions/28253173/what-tool-lets-me-see-gzips-huffman-table-and-blocks), which pointed me towards a small program named [infgen](https://github.com/madler/infgen) which can output a human readable description of a gzip, zlib, or deflate stream. I saved this for later, did a bit of research, and remembered the existence of per-file compression. Searching "zip check algorithm" gave me: [How to determine compression method of a ZIP/RAR file](https://stackoverflow.com/questions/6896487/how-to-determine-compression-method-of-a-zip-rar-file), which pointed me towards the Python package [hachoir](https://pypi.org/project/hachoir/).
 
-Each individual file should have the compressed data with the Huffman Tree used, so to find the Huffman Trees (which are, again, for *compression*), I'd need to first get the data of each file out of the zip, and ignore any information storing stuff like directory structure (which are for *archiving*).
+Each individual file should have its own compressed data with the Huffman Tree used, so to find the Huffman Trees (which are, again, for *compression*), I'd need to first get the data of each file out of the zip, and ignore any information storing stuff like directory structure (which are for *archiving*).
 
 `hachoir` comes with a bunch of parsers for binary files, including zip files (and it turns out to be far more convenient than searching up the spec and opening the file in a hex editor). I used `hachoir-urwid challenge.zip` to investigate.
 
@@ -228,21 +228,21 @@ Here are some explanations based on the example from earlier, where we produced 
 
 Character | Code
 -|-
-A | 1
-B | 01
-C | 001
-D | 000
+`A` | `1`
+`B` | `01`
+`C` | `001`
+`D` | `000`
 
-This tree would not satisfy the Deflate rules. It breaks both of them, since `D` comes right after `C`, and they have the same bit length, `D` should have a code that is 1 greater than the code of `C`, but it actually has a code 1 less than `C` (rule 1). In addition, the code for `A` is `1`, but it should compare (using string ordering) less than the code for `B`, which has a longer bit length (rule 2). You can imagine the code for `A` being the string `"b"`, while the code for `B` has the string `"ab"`. `"ab"` comes before `"b"`.
+This tree would not satisfy the Deflate rules. It breaks both of them. Since `D` comes right after `C`, and they have the same bit length, `D` should have a code that is 1 greater than the code of `C`, but it actually has a code 1 less than `C` (rule 1). In addition, the code for `A` is `1`, but it should compare (using string ordering) less than the code for `B`, which has a longer bit length (rule 2). You can imagine the code for `A` being the string `"b"`, while the code for `B` has the string `"ab"`. `"ab"` comes before `"b"`.
 
 The following mapping would be valid under Deflate:
 
 Character | Code
 -|-
-A | 0
-B | 10
-C | 110
-D | 111
+`A` | `0`
+`B` | `10`
+`C` | `110`
+`D` | `111`
 
 Notice that `111` is 1 after `110`, and that `"0"` < `"10"` < `"110"` (by string comparison - `"a"` < `"ba"` < `"bba"`).
 
@@ -250,12 +250,12 @@ It turns out that when given a table like below, there is only one possible way 
 
 Character | Bit Length
 -|-
-A|1
-B|2
-C|3
-D|3
+`A`|1
+`B`|2
+`C`|3
+`D`|3
 
-So, the above table is what the "litlen" values are storing. `litlen 66 2` would mean the uncompressed value 66 (ASCII for `'B'`) has a bit length of 2. Conveniently, the Deflate spec provides code on how to convert a list of characters and their bit lengths into a tree. We can just translate it into Python and see what we get.
+So, the above table is what the "litlen" values are storing. `litlen 66 2` would mean the uncompressed literal value 66 (ASCII for `B`) has a bit length of 2. Conveniently, the Deflate spec provides code on how to convert a list of characters and their bit lengths into a tree. We can just translate it into Python and see what we get.
 
 ```python
 trees = []
@@ -315,7 +315,13 @@ Hm. Maybe converting the compressed codes to characters will help us see where t
 `[chr(x) for x in trees[0] if x != 0]`
 
 ```txt
-['`', '\u0ff8', '\u0ff9', 'ῼ', '㿼', '´', '߸', '㿽', '\u0ffa', '\u0ffb', '㿾', '߹', '\x04', 'ߺ', '\x14', '\x15', 'Â', 'Ã', '\x16', '\x05', '\x06', 'Ǽ', 'Ä', '\x17', 'Å', '\x07', '\x01', 'Æ', '\u0ffc', 'Ç', '\x08', '\t', 'È', 'É', 'Ê', '\u0ffd', 'Ë', '\u07fb', 'Ì', 'Í', 'Î', 'Ï', 'ǽ', 'Ð', 'Ñ', 'Ò', 'Ó', 'Ô', 'Õ', 'Ö', '×', 'Ø', 'Ù', 'Ú', 'Û', 'Ü', 'Ý', 'Þ', 'ß', 'à', 'á', 'â', 'ã', 'ä', 'å', 'æ', 'ç', 'è', 'é', 'ê', 'ë', 'ì', 'í', 'î', 'ï', 'ð', 'ñ', 'ò', 'ó', 'ô', 'õ', 'ö', '÷', 'ø', 'ù', 'ú', 'û', 'ü', 'ý', '㿿']
+['`', '\u0ff8', '\u0ff9', 'ῼ', '㿼', '´', '߸', '㿽', '\u0ffa', '\u0ffb', '㿾',
+'߹', '\x04', 'ߺ', '\x14', '\x15', 'Â', 'Ã', '\x16', '\x05', '\x06', 'Ǽ', 'Ä',
+'\x17', 'Å', '\x07', '\x01', 'Æ', '\u0ffc', 'Ç', '\x08', '\t', 'È', 'É', 'Ê',
+'\u0ffd', 'Ë', '\u07fb', 'Ì', 'Í', 'Î', 'Ï', 'ǽ', 'Ð', 'Ñ', 'Ò', 'Ó', 'Ô', 'Õ',
+'Ö', '×', 'Ø', 'Ù', 'Ú', 'Û', 'Ü', 'Ý', 'Þ', 'ß', 'à', 'á', 'â', 'ã', 'ä', 'å',
+'æ', 'ç', 'è', 'é', 'ê', 'ë', 'ì', 'í', 'î', 'ï', 'ð', 'ñ', 'ò', 'ó', 'ô', 'õ',
+'ö', '÷', 'ø', 'ù', 'ú', 'û', 'ü', 'ý', '㿿']
 ```
 
 Hm. `[chr(x) for x in trees[0] if chr(x) in string.printable]`?
@@ -326,7 +332,7 @@ Hm. `[chr(x) for x in trees[0] if chr(x) in string.printable]`?
 
 Hm. Throughout essentially the entire challenge I assumed the flag was in the trees, that maybe the compressed codes would turn out to be ASCII and that the flag would be spelled out in the mapping for one of the files, but the only real clue to suggest any of this is the challenge name, and it doesn't look like there are any normal characters in most of the trees.
 
-However, not all hope is lost. I printed out the `litlens` list at every iteration, and it seems like there some files with a *lot* of length 8 literals. This didn't really sound right (especially since the original length of a byte is 8 bits long), so let's do a real check. `import collections` and then inside the loop `print(collections.Counter(x[1] for x in litlens))`
+However, not all hope is lost. I printed out the `litlens` list at every iteration, and it seems like there some files with a *lot* of length 8 literals. This didn't really sound right (especially since the original length of a byte is 8 bits long), so let's do a real check. `import collections` and then inside the loop `print(collections.Counter(x[1] for x in litlens))`. This gives a dict with mappings of `value: # of occurrences`
 
 ```txt
 Counter({8: 60, 12: 6, 4: 6, 14: 4, 11: 4, 5: 4, 3: 2, 13: 2, 9: 2, 7: 1})
@@ -398,7 +404,7 @@ It was at this point that I thought back to the challenge description.
 
 > Sometimes, what's more important is not what you have, but what you're missing.
 
-As mentioned, there are way more codes than there should be in the provided trees, which means there are mappings for characters that are never even used. In addition, the text being compressed is a story without the letter `e`. Since the whole story is uppercase, that would be the character `E`. Perhaps there might be something special if the tree contains a code for the character `E`? Adding `print(ord("E") in set(x[0] for x in litlens))` gives `True` for every file.
+As mentioned, there are way more codes than there should be in the provided trees, which means there are mappings for characters that are never even used. In addition, the text being compressed is a story without the letter `e`. Since the whole story is uppercase, that would be the character `E`. Perhaps there might be something special if the tree contains a code for the character `E`? Adding `print(ord("E") in set(x[0] for x in litlens))` gives `True` for every file: every file's tree contains a redundant mapping for the character `E`.
 
 I'll print out the code for `E` used in each file at the bottom of the loop body.
 `print(bin(tree[ord("E")])[2:].zfill(8))`
@@ -436,9 +442,9 @@ We know the flag will start with `CTF{`, so let's just check what the binary for
 
 Character | Binary | Huffman Code Found
 -|-|-
-C | `01000011` | `11000010`
-T | `01010100` | `00101010`
-F | `01000110` | `01100010`
+`C` | `01000011` | `11000010`
+`T` | `01010100` | `00101010`
+`F` | `01000110` | `01100010`
 
 Well, I think it's pretty clear that the bits are just being reversed. Let's add that into the script and get the flag.
 
