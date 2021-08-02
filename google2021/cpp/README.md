@@ -42,7 +42,7 @@ cpp.c:6208: error: #error "INVALID_FLAG"
       |
 ```
 
-Look like the preprocessor will stop the compilation using an `#error` directive if the flag isn't accepted, and we don't get an output executable.
+The compilation is stopped using an `#error` directive since the flag wasn't accepted, and we don't get an output executable.
 
 Let's have a closer look at the source file and see what commands are being used.
 
@@ -52,7 +52,7 @@ For those unaware, the preprocessor is a program that runs certain special lines
 
 ### `#define`, `#undef`
 
-`#define` declares a macro. For example, `#define PI 3.14` or `#define BUF_SIZE 1024`. When the preprocessor runs, all instances of `PI` or `BUF_SIZE` are replaced with their associated value/code. It is possible to define a macro with an empty value, like `#define X`. The code given uses both of these, such as `#define S 0` and `#define A0`.
+`#define` declares a macro. For example, `#define PI 3.14` or `#define BUF_SIZE 1024`. When the preprocessor runs, all instances of `PI` or `BUF_SIZE` are replaced with their associated value/code. It is possible to define a macro with an empty value, like `#define X`. The code given uses both of these types, such as `#define S 0` and `#define A0`.
 
 `#undef` is like the opposite of `#define`, removing a macro definition. The defining and undefining process happens sequentially throughout the program as the directives are encountered.
 
@@ -60,7 +60,7 @@ For those unaware, the preprocessor is a program that runs certain special lines
 
 `#if` functions the same way as an if statement in normal code. If the condition is not met, any code or directives in the if body is ignored. Macros are expanded, for example the challenge uses `#if S == 0`, which would expand the S macro into its value. The `#ifdef` and `#ifndef` statements check if a macro exists for a certain definition.
 
-An if block is ended by either an `#endif`, or an `#else` block (which would be ended by an `#endif`).
+An `#if` block is ended by either an `#endif`, or an `#else` block (which would be ended by an `#endif`).
 
 ### `#warning`, `#error`
 
@@ -68,9 +68,9 @@ An if block is ended by either an `#endif`, or an `#else` block (which would be 
 
 ### `#include`, `__INCLUDE_LEVEL__`
 
-`#include` is how other source files are *included* in the compilation of a certain file, for example standard library functions. Including is essentially like copy-pasting the referenced file, so usually care must be taken to prevent accidentally including the same file twice (e.g. A includes B and C, but C's source includes B) with an [include guard](https://en.wikipedia.org/wiki/Include_guard).
+`#include` is how other source files are *included* in the compilation of a certain file, for example standard library functions. Including is essentially like copy-pasting the referenced file, so usually care must be taken to prevent accidentally including the same file twice (e.g. A includes B and C, but C's source also includes B) with an [include guard](https://en.wikipedia.org/wiki/Include_guard).
 
-However, that is ignored in this challenge, because (as an editor might warn you when opening the file) `cpp.c` includes itself. You can think of this a recursive function call, where the function body contains all the preprocessor directives.
+However, that is ignored in this challenge, because (as an editor might warn you when opening the file) `cpp.c` includes itself. You can think of this a recursive function call, where the function body contains all the preprocessor directives in the file.
 
 The challenge also uses a macro `__INCLUDE_LEVEL__`, which as the [gcc docs](https://gcc.gnu.org/onlinedocs/cpp/Common-Predefined-Macros.html) say:
 
@@ -148,18 +148,9 @@ Then, some more complicated macros are defined.
 #define l MA(l0, l1, l2, l3, l4, l5, l6, l7)
 ```
 
-The `##` operator here is used to concatenate tokens ([docs](https://gcc.gnu.org/onlinedocs/cpp/Concatenation.html)) and build an *identifier*. Roughly, it would be like if the following Python code printed out "world":
+The `##` operator here is used to concatenate tokens ([docs](https://gcc.gnu.org/onlinedocs/cpp/Concatenation.html)).
 
-```python
-hello = "world"
-token1 = "he"
-token2 = "llo"
-# print(token1 ## token2)
-```
-
-Normal string concatenation would just add "he" and "llo" together to "hello". However, suppose we could take concatenate the values of `token1` and `token2` and treat it as an identifier. Then, it would reference the variable `hello`. This is essentially what is being done in the macros.
-
-Upon searching through the file, it appears that these are only used to run something like `LD(l, 3)`. The `l`, using the `MA` macro, would take the values of the macros `l0` through `l7`, whatever they may be, and paste them together to form a longer binary number (the address). Then, the address would be passed into LD, and it would be pasted along with the second argument (a decimal number) into a ROM address, in the format discussed earlier.
+Upon searching through the file, it appears that these are only used to run something like `LD(l, 3)`. The `l`, using the `MA` macro, would take the values of the macros `l0` through `l7`, which are defined as either `1` or `0` throughout the file, and paste their values together, to form a longer binary number (the address). Then, the address would be passed into LD, and it would be pasted along with the second argument (a decimal number) into a ROM address, in the format discussed earlier.
 
 So, this program is able to read the flag like so:
 
@@ -282,7 +273,7 @@ print(rom)
 [187, 85, 171, 197, 185, 157, 201, 105, 187, 55, 217, 205, 33, 179, 207, 207, 159, 9, 181, 61, 235, 127, 87, 161, 235, 135, 103, 35, 23, 37, 209, 27, 8, 100, 100, 53, 145, 100, 231, 160, 6, 170, 221, 117, 23, 157, 109, 92, 94, 25, 253, 233, 12, 249, 180, 131, 134, 34, 66, 30, 87, 161, 40, 98, 250, 123, 27, 186, 30, 180, 179, 88, 198, 243, 140, 144, 59, 186, 25, 110, 206, 223, 241, 37, 141, 64, 128, 112, 224, 77, 28]
 ```
 
-Then, I cut out the `#if __INCLUDE_LEVEL__ > 12`, `#else`, `#endif` block (i.e. the state machine loop) into another file to process it. In my first attempt, I used a bunch of if statements to convert the output, but I ended up missing some cases, so to be sure, I wrote a second regex based version which first ensures that I know what all the cases are before substituting them for C code.
+Then, I cut out the `#if __INCLUDE_LEVEL__ > 12`, `#else`, `#endif` block (i.e. the state machine loop) to process it. In my first attempt, I used a bunch of if statements to convert the output, but I ended up missing some cases, so to be sure, I wrote a second regex based version which first ensures that I know what all the cases are before substituting them for C code.
 
 Here is the full regex, if you're interested. It (along with the code) is not very important, so you can skip over it:
 
@@ -454,7 +445,7 @@ if (Q == 0) {
 }
 ```
 
-I could add a check to see if the same variable is assigned to multiple times in a row, but since that doesn't change the number of branches, I didn't bother.
+I could add a check to see if the same variable is assigned to multiple times in a row, but since that doesn't change the number of branches (if statements), I didn't bother.
 
 ### Bitwise OR
 
@@ -630,7 +621,7 @@ if (rom[l] & (1<<0)) {
 
 The first part zeroes `l`, then copies 1 or 0 if B is 1 or 0, so it is equivalent to `l = B;`.
 
-The second part is the copy operation we just saw, but using `rom[l]` as the source instead.
+The second part is the copy operation we saw previously, but using `rom[l]` as the source instead.
 
 In addition, `l` is never used outside of these blocks, which means we can just get rid of the `l` entirely and replace these blocks with:
 
