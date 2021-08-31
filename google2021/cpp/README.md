@@ -4,7 +4,7 @@ Google CTF Qualifiers 2021 - Reversing - 155 solves/75 points
 
 > We have this program's source code, but it uses a strange DRM solution. Can you crack it?
 
-Provided file: `cpp.c`
+Provided file: [`cpp.c`](provided-files/cpp.c)
 
 ## Investigation
 
@@ -407,7 +407,7 @@ int main() {
 
 ## It was not `angr` time
 
-Unfortunately, the output of the program so far is over 4000 lines long, with over 1000 `if` statements. I tried running a simple `angr` solve script on it, and I watched it run for several minutes, continually increasing RAM usage to over 12 GB, before stopping it (I assume the more branches there are, the more the program flow depends on the input, and the more branched states you need to keep track of, resulting in a slow and memory intensive run).
+Unfortunately, the [output](converted-long.c) (indentation added) of the program so far is over 4000 lines long, with over 1000 `if` statements. I tried running a simple `angr` solve script on it, and I watched it run for several minutes, continually increasing RAM usage to over 12 GB, before stopping it (I assume the more branches there are, the more the program flow depends on the input, and the more branched states you need to keep track of, resulting in a slow and memory intensive run).
 
 However, looking at the output code, it seems like there are some very redundant blocks of code that result from every operation being done at the bit level. In addition, the code at different states seems pretty repetitive, like the same operation is being done to different inputs at different states.
 
@@ -746,7 +746,7 @@ for pat, sub in subs.items():
     full = re.sub(pat, sub, full)
 ```
 
-We can also remove the declaration for `c` and `l` at the top of the converted file, now that they are both eliminated.
+We can also remove the declaration for `c` and `l` at the top of the [converted file](converted-short.c), now that they are both eliminated.
 
 ## `angr` time for real
 
